@@ -7,18 +7,28 @@
     <title>Página de cadastro</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <div class="form_cadastro">
         <h1 id="title">Cadastre-se aqui</h1>
         <form action="" method="post">
             <label for="name">Nome completo:</label>
             <input type="text" id="name" name="name" required>
+
             <label for="email">Email:</label>
             <input type="text" id="email" name="email">
+            
             <label for="senha">Senha:</label>
             <input type="password" id="senha" name="senha">
+            
             <button type="submit">Enviar</button>
         </form>
     </div>
 </body>
 </html>
-
