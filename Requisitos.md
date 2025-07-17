@@ -1,5 +1,5 @@
 # Documento de Requisitos Funcionais  
-## Projeto: StudyCards  
+## Projeto: CardClass  
 **Tema:** Plataforma para registro e estudo de conteúdos por meio de flashcards organizados por matérias e temas personalizados.
 
 ## 1. Cadastro e Autenticação
