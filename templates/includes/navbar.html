@@ -1,0 +1,19 @@
+<nav class="navbar">
+
+    <a href="/" class="navbar-home">CardClass</a>
+
+    <div class="navbar-menu">
+        <input type="text" placeholder="Buscar..." class="search-bar">
+        <a href="/criar" class="btn-new">Criar Flashcard</a>
+    </div>
+
+    <div class="navbar-actions">
+        {% if false %}
+            <a href="/profile">{{ current_user.name }}</a>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/login">Login</a>
+            <a href="/cadastro" class="cadastrar">Cadastro</a>
+        {% endif %}
+    </div>
+</nav>
