@@ -7,17 +7,18 @@
     <title>Página de cadastro</title>
 </head>
 <body>
-    <h1>Cadastre-se aqui</h1>
     <div class="form_cadastro">
+        <h1 id="title">Cadastre-se aqui</h1>
         <form action="" method="post">
             <label for="name">Nome completo:</label>
-            <input type="text" id="name">
+            <input type="text" id="name" name="name" required>
             <label for="email">Email:</label>
-            <input type="text" id="email">
+            <input type="text" id="email" name="email">
             <label for="senha">Senha:</label>
-            <input type="password" id="senha">
+            <input type="password" id="senha" name="senha">
             <button type="submit">Enviar</button>
         </form>
     </div>
 </body>
 </html>
+
