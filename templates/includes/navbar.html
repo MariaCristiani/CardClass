@@ -4,16 +4,16 @@
 
     <div class="navbar-menu">
         <input type="text" placeholder="Buscar..." class="search-bar">
-        <a href="/criar" class="btn-new">Criar Flashcard</a>
+        <a href="/criar" class="new-flash">Criar Flashcard</a>
     </div>
 
     <div class="navbar-actions">
         {% if current_user.is_authenticated %}
-            <a href="/profile">{{ current_user.name }}</a>
-            <a href="/logout">Logout</a>
+            <a href="{{ url_for('perfil') }}">{{ current_user.nome }}</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
-            <a href="/login">Login</a>
-            <a href="/cadastro" class="cadastrar">Cadastro</a>
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('cadastro') }}" class="cadastrar">Cadastro</a>
         {% endif %}
     </div>
 </nav>
