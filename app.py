@@ -80,7 +80,6 @@ def cadastro():
         conn.commit()
         conn.close()
 
-        flash('Cadastro realizado com sucesso!', 'success')
         return redirect(url_for('login'))
 
     return render_template('cadastro.html')
@@ -103,7 +102,6 @@ def login():
             user_obj = User( id=user['id'], nome=user['nome'], email=user['email'], senha=user['senha'])
             # user_obj.id = user['email'] 
             login_user(user_obj)
-            flash(f'Login bem-sucedido! Bem-vindo, {user["email"]}', 'success')
             return redirect(url_for('dash'))  # Volta pra página Inicial (por enquanto)
         
         flash('Email ou senha incorretos!', 'error')
