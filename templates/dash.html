@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Dash - CardClass{% endblock %}
+
+{% block content %}
     {% if current_user.is_authenticated %}
         <h1>Bem-vindo(a), {{ current_user.nome }}</h1>
     {% else %}
@@ -16,6 +12,4 @@
     <form action="{{url_for('logout')}}" method="POST">
         <button>Sair</button>
     </form>
-
-</body>
-</html>
+{% endblock %}
