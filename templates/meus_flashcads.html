@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}CardClass{% endblock %}
+
+{% block content %}
+<h2>Meus Flashcards</h2>
+
+{% if flashcards %}
+  <ul>
+  {% for f in flashcards %}
+    <li><strong>Matéria:</strong> {{ f['materia'] }} <br>
+        <strong>Pergunta:</strong> {{ f['pergunta'] }} <br>
+        <strong>Resposta:</strong> {{ f['resposta'] }}</li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>Você não criou nenhum flashcard ainda.</p>
+{% endif %}
+
+<a href="{{ url_for('dash') }}">Voltar ao Dashboard</a>
+{% endblock %}
