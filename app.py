@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 
@@ -108,6 +108,42 @@ def login():
         return redirect(url_for('login'))
 
     return render_template('login.html')
+
+from flask import flash
+
+@app.route('/criar', methods=['GET', 'POST'])
+@login_required
+def criar_flashcard():
+    if request.method == 'POST':
+        materia = request.form['materia']
+        pergunta = request.form['pergunta']
+        resposta = request.form['resposta']
+        usuario_id = current_user.id
+
+        conn = sqlite3.connect('banco.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO flashcards (pergunta, resposta, materia, id_usuario)
+            VALUES (?, ?, ?, ?)
+        ''', (pergunta, resposta, materia, usuario_id))
+        conn.commit()
+        conn.close()
+
+        flash('Flashcard criado com sucesso!', 'success')
+        return redirect(url_for('meus_flashcards'))  # redireciona para página dos flashcards
+
+    return render_template('criar.html')
+
+@app.route('/meus_flashcards ')
+@login_required
+def meus_flashcards():
+    conn = get_db_connection()
+    flashcards = conn.execute(
+        "SELECT * FROM flashcards WHERE id_usuario = ?", 
+        (current_user.id,)
+    ).fetchall()
+    conn.close()
+    return render_template('meus_flashcards.html', flashcards=flashcards)
 
 @app.route('/dash')
 @login_required
