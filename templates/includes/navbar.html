@@ -4,7 +4,8 @@
 
     <div class="navbar-menu">
         <input type="text" placeholder="Buscar..." class="search-bar">
-        <a href="/criar" class="new-flash">Criar Flashcard</a>
+        <a href="{{ url_for('criar_flashcard') }}" class="new-flash">Criar Novo Flashcard</a>
+        <a href="{{ url_for('meus_flashcards') }}" class="flashcard">Meus Flashcards</a>
     </div>
 
     <div class="navbar-actions">
