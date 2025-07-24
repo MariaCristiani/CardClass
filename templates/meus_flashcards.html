@@ -7,11 +7,19 @@
 
 {% if flashcards %}
   <ul>
-  {% for f in flashcards %}
-    <li><strong>Matéria:</strong> {{ f['materia'] }} <br>
-        <strong>Pergunta:</strong> {{ f['pergunta'] }} <br>
-        <strong>Resposta:</strong> {{ f['resposta'] }}</li>
-  {% endfor %}
+    {% for f in flashcards %}
+    <li>
+      <strong>Matéria:</strong> {{ f['materia'] }} <br>
+      <strong>Pergunta:</strong> {{ f['pergunta'] }} <br>
+      <strong>Resposta:</strong> {{ f['resposta'] }}
+      <div class="flashcard-actions">
+        <form action="{{ url_for('excluir_flashcard') }}" method="POST">
+        <input type="hidden" name="id" value="{{ f['id'] }}">
+        <button type="submit" class="excluir">Excluir</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
   </ul>
 {% else %}
   <p>Você não criou nenhum flashcard ainda.</p>
