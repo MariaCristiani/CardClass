@@ -134,7 +134,33 @@ def criar_flashcard():
 
     return render_template('criar.html')
 
-@app.route('/meus_flashcards ')
+@app.route('/excluir', methods=['POST'])
+@login_required
+def excluir_flashcard():
+    flashcard_id = request.form.get('id')
+    
+    if not flashcard_id:
+        flash('ID do flashcard não fornecido', 'error')
+        return redirect(url_for('meus_flashcards'))
+
+    conn = get_db_connection()
+    flashcard = conn.execute(
+        'SELECT * FROM flashcards WHERE id = ? AND id_usuario = ?',
+        (flashcard_id, current_user.id)
+    ).fetchone()
+
+    if flashcard is None:
+        flash('Flashcard não encontrado ou você não tem permissão para excluí-lo', 'error')
+        return redirect(url_for('meus_flashcards'))
+
+    conn.execute('DELETE FROM flashcards WHERE id = ?', (flashcard_id,))
+    conn.commit()
+    conn.close()
+
+    flash('Flashcard excluído com sucesso!', 'success')
+    return redirect(url_for('meus_flashcards'))
+
+@app.route('/meus_flashcards')
 @login_required
 def meus_flashcards():
     conn = get_db_connection()
