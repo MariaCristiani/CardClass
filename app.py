@@ -100,9 +100,9 @@ def login():
 
         if user and check_password_hash(user['senha'], senha):
             user_obj = User( id=user['id'], nome=user['nome'], email=user['email'], senha=user['senha'])
-            # user_obj.id = user['email'] 
+
             login_user(user_obj)
-            return redirect(url_for('dash'))  # Volta pra página Inicial (por enquanto)
+            return redirect(url_for('dash'))  
         
         flash('Email ou senha incorretos!', 'error')
         return redirect(url_for('login'))
@@ -116,11 +116,15 @@ from flask import flash
 def criar_flashcard():
     if request.method == 'POST':
         materia = request.form['materia']
+        outra_materia = request.form.get('outra_materia', '').strip()
         pergunta = request.form['pergunta']
         resposta = request.form['resposta']
         usuario_id = current_user.id
 
-        conn = sqlite3.connect('banco.db')
+        if materia == "Outra" and outra_materia:
+            materia = outra_materia
+
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO flashcards (pergunta, resposta, materia, id_usuario)
@@ -158,6 +162,54 @@ def excluir_flashcard():
     conn.close()
 
     flash('Flashcard excluído com sucesso!', 'success')
+    return redirect(url_for('meus_flashcards'))
+
+@app.route('/editar', methods=['POST'])
+@login_required
+def editar_flashcard():
+    flashcard_id = request.form.get('id')
+
+    if not flashcard_id:
+        flash('ID do flashcard não fornecido', 'error')
+        return redirect(url_for('meus_flashcards'))
+
+    conn = get_db_connection()
+    flashcard = conn.execute(
+        'SELECT * FROM flashcards WHERE id = ? AND id_usuario = ?',
+        (flashcard_id, current_user.id)
+    ).fetchone()
+    conn.close()
+
+    if flashcard is None:
+        flash('Flashcard não encontrado ou você não tem permissão para editá-lo', 'error')
+        return redirect(url_for('meus_flashcards'))
+
+    return render_template('editar.html', flashcard=flashcard)
+
+@app.route('/atualizar', methods=['POST'])
+@login_required
+def atualizar_flashcard():
+    id = request.form['id']
+    materia = request.form['materia']
+    pergunta = request.form['pergunta']
+    resposta = request.form['resposta']
+
+    conn = get_db_connection()
+    flashcard = conn.execute(
+        'SELECT * FROM flashcards WHERE id = ? AND id_usuario = ?',
+        (id, current_user.id)
+    ).fetchone()
+
+    if flashcard is None:
+        flash('Flashcard não encontrado ou você não tem permissão para atualizá-lo', 'error')
+        conn.close()
+        return redirect(url_for('meus_flashcards'))
+
+    conn.execute('UPDATE flashcards SET materia = ?, pergunta = ?, resposta = ? WHERE id = ?', (materia, pergunta, resposta, id))
+    conn.commit()
+    conn.close()
+
+    flash('Flashcard atualizado com sucesso!', 'success')
     return redirect(url_for('meus_flashcards'))
 
 @app.route('/meus_flashcards')
