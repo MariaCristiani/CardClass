@@ -4,7 +4,7 @@
 
 {% block content %} 
 <h1>Criar Novo Flashcard</h1>
-    <form method="POST">
+<form method="POST">
     <label for="materia">Matéria:</label>
     <select id="materia" name="materia" required>
         <option value="">Selecione a matéria</option>
@@ -14,13 +14,23 @@
         <option value="História">História</option>
         <option value="Geografia">Geografia</option>
         <option value="Filosofia">Filosofia</option>
+        <option value="Outra">Outra</option>
     </select>
-        <label>Pergunta:</label><br>
-        <textarea name="pergunta" rows="4" cols="50"></textarea><br><br>
 
-        <label>Resposta:</label><br>
-        <textarea name="resposta" rows="4" cols="50"></textarea><br><br>
+    <br><br>
 
-  <button type="submit">Criar Flashcard</button>
+    <label for="outra_materia">Outra matéria (se aplicável):</label>
+    <input type="text" id="outra_materia" name="outra_materia" placeholder="Digite a matéria">
+
+    <br><br>
+
+    <label>Pergunta:</label><br>
+    <textarea name="pergunta" rows="4" cols="50" required></textarea><br><br>
+
+    <label>Resposta:</label><br>
+    <textarea name="resposta" rows="4" cols="50" required></textarea><br><br>
+
+    <button type="submit">Criar Flashcard</button>
 </form>
-{% endblock %}   
+{% endblock %}
+
