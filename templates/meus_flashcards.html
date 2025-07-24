@@ -17,6 +17,11 @@
         <input type="hidden" name="id" value="{{ f['id'] }}">
         <button type="submit" class="excluir">Excluir</button>
         </form>
+       
+        <form action="{{ url_for('editar_flashcard') }}" method="POST">
+          <input type="hidden" name="id" value="{{ f['id'] }}">
+          <button type="submit" class="editar">Editar</button>
+      </form>
       </div>
     </li>
     {% endfor %}
