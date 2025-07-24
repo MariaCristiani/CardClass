@@ -6,4 +6,5 @@
         <h1>Seu Perfil</h1>
         <p>Nome: {{ user.nome }}</p>
         <p>Email: {{ user.email }}</p>
+        <a href="{{ url_for('meus_flashcards') }}" class="flashcard">Meus Flashcards</a>
 {% endblock %}
