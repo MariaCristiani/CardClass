@@ -237,7 +237,32 @@ def logout():
 @app.route('/perfil')
 @login_required
 def perfil():
-    return render_template('perfil.html', user=current_user)
+    conn = get_db_connection()
+    historico = conn.execute('''
+        SELECT f.pergunta, h.data_utilizacao, h.acerto
+        FROM flashcard_historico h
+        JOIN flashcards f ON f.id = h.flashcard_id
+        WHERE h.usuario_id = ?
+        ORDER BY h.data_utilizacao DESC
+    ''', (current_user.id,)).fetchall()
+    conn.close()
+    
+    return render_template('perfil.html', user=current_user, historico=historico)
+
+conn = get_db_connection()
+conn.execute('''
+    CREATE TABLE IF NOT EXISTS flashcard_historico (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL,
+        flashcard_id INTEGER NOT NULL,
+        data_utilizacao TEXT DEFAULT CURRENT_TIMESTAMP,
+        acerto BOOLEAN,
+        FOREIGN KEY (usuario_id) REFERENCES users(id),
+        FOREIGN KEY (flashcard_id) REFERENCES flashcards(id)
+    )
+''')
+conn.commit()
+conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)

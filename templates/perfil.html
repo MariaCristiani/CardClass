@@ -3,8 +3,26 @@
 {% block title %}Perfil - CardClass{% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='perfil.css') }}">
+
+    <div class="perfil-container">
         <h1>Seu Perfil</h1>
-        <p>Nome: {{ user.nome }}</p>
-        <p>Email: {{ user.email }}</p>
+        <p><strong>Nome:</strong> {{ user.nome }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
         <a href="{{ url_for('meus_flashcards') }}" class="flashcard">Meus Flashcards</a>
+        
+        <h2>Histórico</h2>
+        {% if historico %}
+            <ul class="historico-lista">
+                {% for item in historico %}
+                    <li>
+                        <strong>Título:</strong> {{ item.titulo }}<br>
+                    </li>
+                    <hr>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Você ainda não respondeu nenhum flashcard.</p>
+        {% endif %}
+    </div>
 {% endblock %}
