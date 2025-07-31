@@ -253,6 +253,10 @@ def perfil():
 def pagina_nao_encontrada(e):
     return render_template("404.html"), 404
 
+@app.errorhandler(500)
+def erro_do_servidor(e):
+    return render_template("500.html"), 500
+
 conn = get_db_connection()
 conn.execute('''
     CREATE TABLE IF NOT EXISTS flashcard_historico (
