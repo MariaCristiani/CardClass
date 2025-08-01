@@ -221,12 +221,34 @@ def meus_flashcards():
         (current_user.id,)
     ).fetchall()
     conn.close()
-    return render_template('meus_flashcards.html', flashcards=flashcards)
+
+    ultimo_flashcard_id = request.cookies.get('ultimo_flashcard')
+
+    return render_template('meus_flashcards.html', flashcards=flashcards, ultimo_flashcard_id=ultimo_flashcard_id)
+
+@app.route('/marcar_flashcard/<int:flashcard_id>')
+@login_required
+def marcar_flashcard(flashcard_id):
+    response = make_response(redirect(url_for('meus_flashcards')))
+    response.set_cookie('ultimo_flashcard', str(flashcard_id), max_age=3600)  
+    return response
 
 @app.route('/dash')
 @login_required
 def dash():
-    return render_template('dash.html')
+    ultima_materia = request.cookies.get('ultima_materia')
+    ultimo_flashcard_id = request.cookies.get('ultimo_flashcard')
+
+    ultimo_flashcard = None
+    if ultimo_flashcard_id:
+        conn = get_db_connection()
+        ultimo_flashcard = conn.execute(
+            "SELECT * FROM flashcards WHERE id = ? AND id_usuario = ?",
+            (ultimo_flashcard_id, current_user.id)
+        ).fetchone()
+        conn.close()
+
+    return render_template('dash.html', ultima_materia=ultima_materia, ultimo_flashcard=ultimo_flashcard)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
