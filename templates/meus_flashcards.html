@@ -14,14 +14,17 @@
       <strong>Resposta:</strong> {{ f['resposta'] }}
       <div class="flashcard-actions">
         <form action="{{ url_for('excluir_flashcard') }}" method="POST">
-        <input type="hidden" name="id" value="{{ f['id'] }}">
-        <button type="submit" class="excluir">Excluir</button>
+            <input type="hidden" name="id" value="{{ f['id'] }}">
+            <button type="submit" class="excluir">Excluir</button>
         </form>
        
         <form action="{{ url_for('editar_flashcard') }}" method="POST">
-          <input type="hidden" name="id" value="{{ f['id'] }}">
-          <button type="submit" class="editar">Editar</button>
-      </form>
+            <input type="hidden" name="id" value="{{ f['id'] }}">
+            <button type="submit" class="editar">Editar</button>
+        </form>
+
+        <!-- Botão para marcar como último flashcard visto -->
+        <a href="{{ url_for('marcar_flashcard', flashcard_id=f['id']) }}" class="marcar">Marcar como último visto</a>
       </div>
     </li>
     {% endfor %}
