@@ -5,6 +5,18 @@
 {% block content %}
     {% if current_user.is_authenticated %}
         <h1>Bem-vindo(a), {{ current_user.nome }}</h1>
+
+        {% if ultimo_flashcard %}
+            <div class="ultimo-flashcard">
+                <h2>Último Flashcard Visto</h2>
+                <p><strong>Matéria:</strong> {{ ultimo_flashcard['materia'] }}</p>
+                <p><strong>Pergunta:</strong> {{ ultimo_flashcard['pergunta'] }}</p>
+                <p><strong>Resposta:</strong> {{ ultimo_flashcard['resposta'] }}</p>
+                <a href="{{ url_for('meus_flashcards') }}">Continuar Estudando</a>
+            </div>
+        {% else %}
+            <p>Você ainda não marcou nenhum flashcard como último visto.</p>
+        {% endif %}
     {% else %}
         <p>Você não está logado. <a href="{{ url_for('login') }}">Clique aqui para fazer login</a></p>
     {% endif %}
