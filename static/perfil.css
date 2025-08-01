@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  padding: 20px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.perfil-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 600px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+  margin-top: auto;
+  text-align: center;
+}
+
+.navbar a:hover {
+  color: maroon;
+  border-radius: 5px;
+}
+
+.perfil-container h1,
+.perfil-container h2 {
+  color: maroon;
+  margin-bottom: 20px;
+}
+
+.historico-lista li {
+  margin-bottom: 10px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #ccc;
+}
+
+@media (max-width: 640px) {
+  .perfil-container {
+    padding: 15px;
+  }
+}
