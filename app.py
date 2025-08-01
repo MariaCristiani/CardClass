@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 
@@ -38,7 +38,6 @@ class User(UserMixin):
             email=existente['email'],
             senha=existente['senha']
         )
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -222,33 +221,37 @@ def meus_flashcards():
     ).fetchall()
     conn.close()
 
-    ultimo_flashcard_id = request.cookies.get('ultimo_flashcard')
+    ultimo_flashcard = request.cookies.get('ultimo_flashcard')
+    return render_template('meus_flashcards.html', flashcards=flashcards, ultimo_flashcard=ultimo_flashcard)
 
-    return render_template('meus_flashcards.html', flashcards=flashcards, ultimo_flashcard_id=ultimo_flashcard_id)
-
-@app.route('/marcar_flashcard/<int:flashcard_id>')
+@app.route('/marcar')
 @login_required
-def marcar_flashcard(flashcard_id):
+def marcar_flashcard():
+    flashcard_id = request.args.get('flashcard_id')
+    if not flashcard_id:
+        flash('ID não informado', 'error')
+        return redirect(url_for('meus_flashcards'))
     response = make_response(redirect(url_for('meus_flashcards')))
-    response.set_cookie('ultimo_flashcard', str(flashcard_id), max_age=3600)  
+    response.set_cookie('ultimo_flashcard', flashcard_id, max_age=60*60*24*30)
     return response
 
 @app.route('/dash')
 @login_required
 def dash():
-    ultima_materia = request.cookies.get('ultima_materia')
-    ultimo_flashcard_id = request.cookies.get('ultimo_flashcard')
+    conn = get_db_connection()
 
+    flashcard_id = request.cookies.get('ultimo_flashcard')
     ultimo_flashcard = None
-    if ultimo_flashcard_id:
-        conn = get_db_connection()
-        ultimo_flashcard = conn.execute(
-            "SELECT * FROM flashcards WHERE id = ? AND id_usuario = ?",
-            (ultimo_flashcard_id, current_user.id)
-        ).fetchone()
-        conn.close()
 
-    return render_template('dash.html', ultima_materia=ultima_materia, ultimo_flashcard=ultimo_flashcard)
+    if flashcard_id:
+        ultimo_flashcard = conn.execute(
+            'SELECT * FROM flashcards WHERE id = ? AND id_usuario = ?',
+            (flashcard_id, current_user.id)
+        ).fetchone()
+
+    conn.close()
+
+    return render_template('dash.html', ultimo_flashcard=ultimo_flashcard)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -259,40 +262,7 @@ def logout():
 @app.route('/perfil')
 @login_required
 def perfil():
-    conn = get_db_connection()
-    historico = conn.execute('''
-        SELECT f.pergunta, h.data_utilizacao, h.acerto
-        FROM flashcard_historico h
-        JOIN flashcards f ON f.id = h.flashcard_id
-        WHERE h.usuario_id = ?
-        ORDER BY h.data_utilizacao DESC
-    ''', (current_user.id,)).fetchall()
-    conn.close()
-    
-    return render_template('perfil.html', user=current_user, historico=historico)
-
-@app.errorhandler(404)
-def pagina_nao_encontrada(e):
-    return render_template("404.html"), 404
-
-@app.errorhandler(500)
-def erro_do_servidor(e):
-    return render_template("500.html"), 500
-
-conn = get_db_connection()
-conn.execute('''
-    CREATE TABLE IF NOT EXISTS flashcard_historico (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        usuario_id INTEGER NOT NULL,
-        flashcard_id INTEGER NOT NULL,
-        data_utilizacao TEXT DEFAULT CURRENT_TIMESTAMP,
-        acerto BOOLEAN,
-        FOREIGN KEY (usuario_id) REFERENCES users(id),
-        FOREIGN KEY (flashcard_id) REFERENCES flashcards(id)
-    )
-''')
-conn.commit()
-conn.close()
+    return render_template('perfil.html', user=current_user)
 
 if __name__ == '__main__':
     app.run(debug=True)
