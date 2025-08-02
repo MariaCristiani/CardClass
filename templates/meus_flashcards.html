@@ -5,6 +5,11 @@
 {% block content %}
 <h2>Meus Flashcards</h2>
 
+{% if termo_busca %}
+    <p>Resultados para: "{{ termo_busca }}"</p>
+    <a href="{{ url_for('meus_flashcards') }}">Limpar pesquisa</a>
+{% endif %}
+
 {% if flashcards %}
   <ul>
     {% for f in flashcards %}
@@ -33,10 +38,12 @@
 {% endfor %}
   </ul>
 {% else %}
-  <p>Você não criou nenhum flashcard ainda.</p>
+  {% if termo_busca %}
+    <p>Nenhum flashcard encontrado para "{{ termo_busca }}".</p>
+  {% else %}
+    <p>Você não criou nenhum flashcard ainda.</p>
+  {% endif %}
 {% endif %}
 
 <a href="{{ url_for('dash') }}">Voltar ao Dashboard</a>
 {% endblock %}
-
-
