@@ -214,15 +214,24 @@ def atualizar_flashcard():
 @app.route('/meus_flashcards')
 @login_required
 def meus_flashcards():
+    termo = request.args.get('q', '').strip()
     conn = get_db_connection()
-    flashcards = conn.execute(
-        "SELECT * FROM flashcards WHERE id_usuario = ?", 
-        (current_user.id,)
-    ).fetchall()
+    
+    if termo:
+        flashcards = conn.execute(
+            "SELECT * FROM flashcards WHERE id_usuario = ? AND (pergunta LIKE ? OR resposta LIKE ? OR materia LIKE ?)", 
+            (current_user.id, f'%{termo}%', f'%{termo}%', f'%{termo}%')
+        ).fetchall()
+    else:
+        flashcards = conn.execute(
+            "SELECT * FROM flashcards WHERE id_usuario = ?", 
+            (current_user.id,)
+        ).fetchall()
+    
     conn.close()
 
     ultimo_flashcard = request.cookies.get('ultimo_flashcard')
-    return render_template('meus_flashcards.html', flashcards=flashcards, ultimo_flashcard=ultimo_flashcard)
+    return render_template('meus_flashcards.html', flashcards=flashcards, ultimo_flashcard=ultimo_flashcard, termo_busca=termo)
 
 @app.route('/marcar')
 @login_required
@@ -273,6 +282,28 @@ def perfil():
     conn.close()
 
     return render_template('perfil.html', user=current_user, historico=historico)
+
+@app.route('/buscar', methods=['GET'])
+@login_required
+def buscar_flashcards():
+    termo = request.args.get('q', '').strip()
+    
+    if not termo:
+        flash('Digite um termo para pesquisar', 'error')
+        return redirect(url_for('meus_flashcards'))
+    
+    conn = get_db_connection()
+    
+    flashcards = conn.execute('''
+        SELECT * FROM flashcards 
+        WHERE id_usuario = ? 
+        AND (pergunta LIKE ? OR resposta LIKE ? OR materia LIKE ?)
+        ORDER BY materia
+    ''', (current_user.id, f'%{termo}%', f'%{termo}%', f'%{termo}%')).fetchall()
+    
+    conn.close()
+    
+    return render_template('meus_flashcards.html', flashcards=flashcards, termo_busca=termo)
 
 @app.errorhandler(404)
 def pagina_nao_encontrada(e):
