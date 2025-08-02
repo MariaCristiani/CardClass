@@ -3,7 +3,7 @@
   text-align: center;
 }
 
-.form_cadastro {
+.form_login{
   background-color: white;
   border: solid 4px black;
   border-radius: 9px;
@@ -76,7 +76,7 @@ button:hover {
 
 
 @media (max-width: 600px) {
-  .form_cadastro {
+  .form_login {
     width: 90%;
     padding: 30px;
     height: auto;
