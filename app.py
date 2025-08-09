@@ -283,6 +283,46 @@ def perfil():
 
     return render_template('perfil.html', user=current_user, historico=historico)
 
+@app.route('/cardspla')
+@login_required
+def cardspla():
+    return render_template('cardspla.html')
+
+@app.route('/bio')
+@login_required
+def bio():
+    return render_template('materias/bio.html')
+
+@app.route('/esp')
+@login_required
+def esp():
+    return render_template('materias/esp.html')
+
+@app.route('/filo')
+@login_required
+def filo():
+    return render_template('materias/filo.html')
+
+@app.route('/geo')
+@login_required
+def geo():
+    return render_template('materias/geo.html')
+
+@app.route('/hist')
+@login_required
+def hist():
+    return render_template('materias/hist.html')
+
+@app.route('/ing')
+@login_required
+def ing():
+    return render_template('materias/ing.html')
+
+@app.route('/mat')
+@login_required
+def mat():
+    return render_template('materias/mat.html')
+
 @app.route('/buscar', methods=['GET'])
 @login_required
 def buscar_flashcards():
