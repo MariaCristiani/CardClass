@@ -5,40 +5,29 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
   background-color: #f5f5f5;
-  padding: 20px;
+  width: 100%;
   min-height: 100vh;
-  margin: 0;
 }
 
 .perfil-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   max-width: 600px;
+  width: 100%;
+  margin: 60px auto;
   background-color: #fff;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-footer {
-  margin-top: auto;
-  text-align: center;
-}
-
-.navbar a:hover {
-  color: maroon;
-  border-radius: 5px;
-}
-
 .perfil-container h1,
 .perfil-container h2 {
-  color: maroon;
+  color: #2c3e50;
   margin-bottom: 20px;
+}
+
+h2{
+  margin-top: 10px;
 }
 
 .historico-lista li {
@@ -51,8 +40,24 @@ hr {
   background-color: #ccc;
 }
 
+.flashcard {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #2c3e50;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.flashcard:hover {
+  background-color: #34495e;
+}
+
 @media (max-width: 640px) {
   .perfil-container {
     padding: 15px;
+    margin: 30px auto;
   }
 }
