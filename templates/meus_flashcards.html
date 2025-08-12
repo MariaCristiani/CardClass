@@ -3,6 +3,8 @@
 {% block title %}Meus Flashcards - Cardclass{% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='flashcard.css') }}">
+
 <h2>Meus Flashcards</h2>
 
 {% if termo_busca %}
@@ -30,7 +32,7 @@
             <button type="submit" class="editar">Editar</button>
         </form>
 
-        <a href="{{ url_for('marcar_flashcard', flashcard_id=f['id']) }}" class="marcar">Marcar como último visto</a>
+        <a href="{{ url_for('marcar_flashcard', flashcard_id=f['id']) }}" class="marcar">Ver mais tarde</a>
 
       </div>
     </div>
@@ -46,4 +48,5 @@
 {% endif %}
 
 <a href="{{ url_for('dash') }}">Voltar ao Dashboard</a>
+
 {% endblock %}
