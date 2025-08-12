@@ -3,8 +3,10 @@
 {% block title %}Criar Novo Flashcard - Cardclass{% endblock %}
 
 {% block content %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='flashcard.css') }}">
+
 <h1>Criar Novo Flashcard</h1>
-<form method="POST">
+<form method="POST" class="form-criar-flashcard">
     <label for="materia">Matéria:</label>
     <select id="materia" name="materia" required>
         <option value="">Selecione a matéria</option>
