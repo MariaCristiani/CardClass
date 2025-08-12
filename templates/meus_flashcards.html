@@ -5,7 +5,7 @@
 {% block content %}
   <link rel="stylesheet" href="{{ url_for('static', filename='flashcard.css') }}">
 
-<h2>Meus Flashcards</h2>
+<h1>Meus Flashcards</h1>
 
 {% if termo_busca %}
     <p>Resultados para: "{{ termo_busca }}"</p>
@@ -50,3 +50,4 @@
 <a href="{{ url_for('dash') }}">Voltar ao Dashboard</a>
 
 {% endblock %}
+
