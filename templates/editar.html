@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Flashcard{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='flashcard.css') }}">
+<div class="edit-flashcard-container">
+  <h1>Editar Flashcard</h1>
+  <form action="{{ url_for('atualizar_flashcard') }}" method="POST">
+    <input type="hidden" name="id" value="{{ flashcard['id'] }}">
+
+    <label for="materia">Matéria:</label>
+    <input type="text" id="materia" name="materia" value="{{ flashcard['materia'] }}" required>
+
+    <label for="pergunta">Pergunta:</label>
+    <textarea id="pergunta" name="pergunta" rows="3" required>{{ flashcard['pergunta'] }}</textarea>
+
+    <label for="resposta">Resposta:</label>
+    <textarea id="resposta" name="resposta" rows="4" required>{{ flashcard['resposta'] }}</textarea>
+
+    <button type="submit">Salvar</button>
+    <a href="{{ url_for('meus_flashcards') }}" class="cancelar">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
+
