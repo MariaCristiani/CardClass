@@ -68,7 +68,7 @@ def cadastro():
         senha_hash = generate_password_hash(senha)
 
         conn = get_db_connection()
-        existente = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone() # Retorna uma linha só (como um dicionário ou tupla)
+        existente = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone() 
 
         if existente:
             flash('Email já cadastrado!', 'error')
@@ -101,14 +101,12 @@ def login():
             user_obj = User( id=user['id'], nome=user['nome'], email=user['email'], senha=user['senha'])
 
             login_user(user_obj)
-            return redirect(url_for('dash'))  
+            return redirect(url_for('index'))  
         
         flash('Email ou senha incorretos!', 'error')
         return redirect(url_for('login'))
 
     return render_template('login.html')
-
-from flask import flash
 
 @app.route('/criar', methods=['GET', 'POST'])
 @login_required
@@ -133,8 +131,7 @@ def criar_flashcard():
         conn.close()
 
         flash('Flashcard criado com sucesso!', 'success')
-        return redirect(url_for('meus_flashcards'))  # redireciona para página dos flashcards
-
+        return redirect(url_for('meus_flashcards'))  
     return render_template('criar.html')
 
 @app.route('/excluir', methods=['POST'])
@@ -210,29 +207,34 @@ def atualizar_flashcard():
 
     flash('Flashcard atualizado com sucesso!', 'success')
     return redirect(url_for('meus_flashcards'))
-
 @app.route('/meus_flashcards')
 @login_required
 def meus_flashcards():
-    termo = request.args.get('q', '').strip()
     conn = get_db_connection()
     
-    if termo:
-        flashcards = conn.execute(
-            "SELECT * FROM flashcards WHERE id_usuario = ? AND (pergunta LIKE ? OR resposta LIKE ? OR materia LIKE ?)", 
-            (current_user.id, f'%{termo}%', f'%{termo}%', f'%{termo}%')
-        ).fetchall()
-    else:
-        flashcards = conn.execute(
-            "SELECT * FROM flashcards WHERE id_usuario = ?", 
-            (current_user.id,)
-        ).fetchall()
+    # Pega todos os flashcards do usuário, já ordenando por matéria
+    flashcards = conn.execute(
+        "SELECT * FROM flashcards WHERE id_usuario = ? ORDER BY materia, id",
+        (current_user.id,)
+    ).fetchall()
     
     conn.close()
 
-    ultimo_flashcard = request.cookies.get('ultimo_flashcard')
-    return render_template('meus_flashcards.html', flashcards=flashcards, ultimo_flashcard=ultimo_flashcard, termo_busca=termo)
+    # Agrupar por matéria
+    flashcards_por_materia = {}
+    for f in flashcards:
+        materia = f['materia'] or 'Outros'
+        if materia not in flashcards_por_materia:
+            flashcards_por_materia[materia] = []
+        flashcards_por_materia[materia].append(f)
 
+    ultimo_flashcard = request.cookies.get('ultimo_flashcard')
+    
+    return render_template(
+        'meus_flashcards.html',
+        flashcards_por_materia=flashcards_por_materia,
+        ultimo_flashcard=ultimo_flashcard
+    )
 @app.route('/marcar')
 @login_required
 def marcar_flashcard():
@@ -283,46 +285,6 @@ def perfil():
 
     return render_template('perfil.html', user=current_user, historico=historico)
 
-@app.route('/cardspla')
-@login_required
-def cardspla():
-    return render_template('cardspla.html')
-
-@app.route('/bio')
-@login_required
-def bio():
-    return render_template('materias/bio.html')
-
-@app.route('/esp')
-@login_required
-def esp():
-    return render_template('materias/esp.html')
-
-@app.route('/filo')
-@login_required
-def filo():
-    return render_template('materias/filo.html')
-
-@app.route('/geo')
-@login_required
-def geo():
-    return render_template('materias/geo.html')
-
-@app.route('/hist')
-@login_required
-def hist():
-    return render_template('materias/hist.html')
-
-@app.route('/ing')
-@login_required
-def ing():
-    return render_template('materias/ing.html')
-
-@app.route('/mat')
-@login_required
-def mat():
-    return render_template('materias/mat.html')
-
 @app.route('/buscar', methods=['GET'])
 @login_required
 def buscar_flashcards():
@@ -352,21 +314,6 @@ def pagina_nao_encontrada(e):
 @app.errorhandler(500)
 def erro_do_servidor(e):
     return render_template("500.html"), 500
-
-conn = get_db_connection()
-conn.execute('''
-    CREATE TABLE IF NOT EXISTS flashcard_historico (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        usuario_id INTEGER NOT NULL,
-        flashcard_id INTEGER NOT NULL,
-        data_utilizacao TEXT DEFAULT CURRENT_TIMESTAMP,
-        acerto BOOLEAN,
-        FOREIGN KEY (usuario_id) REFERENCES users(id),
-        FOREIGN KEY (flashcard_id) REFERENCES flashcards(id)
-    )
-''')
-conn.commit()
-conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
