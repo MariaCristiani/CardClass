@@ -3,6 +3,7 @@
 {% block title %}CardClass{% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <nav class="rotas">
         <ul>
         <li><a href="{{ url_for('login') }}">Login</a></li>
@@ -10,4 +11,44 @@
         <li><a href="{{ url_for('criar_flashcard') }}">Criar Novos Flashcards</a></li>
         </ul>
     </nav>
+    <div class="content">
+        <h1>Bem-vindo ao CardClass!</h1>
+        <p>
+            O CardClass é a sua ferramenta online para estudar de forma simples e eficiente usando flashcards. Crie, edite e exclua seus próprios
+            cartões, pesquise conteúdos rapidamente e acompanhe seu progresso pelo histórico de utilização. Nosso sistema também salva o último 
+            flashcard acessado, para que você continue exatamente de onde parou.
+        </p>
+
+        <h2>Como Funciona o CardClass</h2>
+        <div class="tutorial">
+            <div>
+                <img src="caminho/para/icone1.png" alt="Criar">
+                <h3>Crie Seus Próprios Cards</h3>
+                <p>Personalize seus flashcards para estudar do seu jeito.</p>
+            </div>
+            <div>
+                <img src="caminho/para/icone2.png" alt="Encontrar">
+                <h3>Encontre Cartões</h3>
+                <p>Explore flashcards da nossa plataforma</p>
+            </div>
+            <div>
+                <img src="caminho/para/icone3.png" alt="Aprender">
+                <h3>Aprenda de Forma Inteligente</h3>
+                <p>Nosso sistema de repetição espaçada organiza suas revisões para garantir o máximo de retenção.</p>
+            </div>
+        </div>
+        <h1>Comece a Aprender Já</h1>
+        <h4>Matérias</h4>
+        <nav class="cards_da_plataforma">
+            <ul>
+                <li><a href="{{ url_for('bio') }}">Biologia</a></li>
+                <li><a href="{{ url_for('esp') }}">Espanhol</a></li>
+                <li><a href="{{ url_for('filo') }}">Filosofia</a></li>
+                <li><a href="{{ url_for('geo') }}">Geografia</a></li>
+                <li><a href="{{ url_for('hist') }}">História</a></li>
+                <li><a href="{{ url_for('ing') }}">Inglês</a></li>
+                <li><a href="{{ url_for('mat') }}">Matemática</a></li>
+            </ul>
+        </nav>
+    </div>
 {% endblock %}
