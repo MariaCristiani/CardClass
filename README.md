@@ -1,14 +1,14 @@
 # CardClass
 
-## O que é o CardClass?
-O CardClass é um projeto desenvolvido para a matéria de Programa de Sistemas para Internet (PSI) que consiste em uma aplicação web para estudo por meio de flashcards.
+## 📚 O que é o CardClass?
+O CardClass é um projeto desenvolvido para a matéria de **Programa de Sistemas para Internet (PSI)** que consiste em uma aplicação web para estudo por meio de flashcards.  
 O sistema permite que o usuário crie, edite, exclua e pesquise flashcards, além de armazenar um histórico de utilização e salvar o último flashcard acessado por meio de cookies.
 
-## Tecnologias Utilizadas
-Python 3
-Flask
-SQLite
-HTML / CSS
+## 🛠 Tecnologias Utilizadas
+-  Python 3
+-  Flask
+-  SQLite
+-  HTML / CSS
 
 ## Para rodar localmente este projeto você precisa:
 O CardClass foi feito utilizando o framework ```Flask``` para fazer a aplicação. Então você precisa seguir os seguintes passos, caso tenha interesse em rodar esse projeto localmente:
@@ -51,20 +51,19 @@ python iniciar.py
 flask run --debug
 ```
 
-## Equipe e suas Funções
 ## 👥 Equipe e suas Funções
 
-- **[Cristiani](https://github.com/MariaCristiani)**  
-  "Criou o repositório no GitHub e configurou o banco de dados SQLite com a tabela de usuários.  
-  Implementou as páginas de registro e login de usuários, além das páginas personalizadas para erros 404 e 500."
-
-- **[Amanda Alves](https://github.com/AmandaA6)**  
+- **[Amanda](https://github.com/AmandaA6)**  
   "Definiu o tema do sistema junto ao grupo e elaborou o Documento de Requisitos Funcionais.  
   Implementou o recurso de senha com hash seguro, desenvolveu funcionalidades de criação e listagem no CRUD, e foi responsável pelo README do projeto."
 
 - **[Fernanda](https://github.com/Fernanda-Erika)**  
   "Montou a estrutura inicial do projeto, incluindo ambiente virtual, `app.py` e `requirements.txt`.  
   Implementou a autenticação com Flask-Login/sessões, a funcionalidade de edição no CRUD e o uso de `make_response` para cookies ou headers customizados."
+
+- **[Maria Cristiani](https://github.com/MariaCristiani)**  
+  "Criou o repositório no GitHub e configurou o banco de dados SQLite com a tabela de usuários.  
+  Implementou as páginas de registro e login de usuários, além das páginas personalizadas para erros 404 e 500."
 
 - **[Priscylla](https://github.com/pribeea)**  
   "Criou o sistema de logout e desenvolveu os templates com `extends`/`includes` para base e navbar.  
