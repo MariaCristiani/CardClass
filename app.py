@@ -129,9 +129,9 @@ def criar_flashcard():
         ''', (pergunta, resposta, materia, usuario_id))
         conn.commit()
         conn.close()
-
-        flash('Flashcard criado com sucesso!', 'success')
-        return redirect(url_for('meus_flashcards'))  
+        
+        return redirect(url_for('meus_flashcards'))
+    
     return render_template('criar.html')
 
 @app.route('/excluir', methods=['POST'])
