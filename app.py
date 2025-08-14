@@ -219,8 +219,6 @@ def meus_flashcards():
         (current_user.id,)
     ).fetchall()
     
-    conn.close()
-
     # Agrupar por matéria
     flashcards_por_materia = {}
     for f in flashcards:
@@ -228,6 +226,15 @@ def meus_flashcards():
         if materia not in flashcards_por_materia:
             flashcards_por_materia[materia] = []
         flashcards_por_materia[materia].append(f)
+
+        # REGISTRA O ACESSO NO HISTÓRICO
+        conn.execute('''
+            INSERT INTO flashcard_historico (usuario_id, flashcard_id, acerto)
+            VALUES (?, ?, NULL)
+        ''', (current_user.id, f['id']))
+
+    conn.commit()
+    conn.close()
 
     ultimo_flashcard = request.cookies.get('ultimo_flashcard')
     
@@ -290,13 +297,16 @@ def logout():
 @login_required
 def perfil():
     conn = get_db_connection()
+    
+    # Seleciona flashcards distintos acessados pelo usuário, incluindo matéria
     historico = conn.execute('''
-        SELECT f.materia, f.pergunta
+        SELECT DISTINCT f.pergunta, f.materia
         FROM flashcard_historico h
         JOIN flashcards f ON f.id = h.flashcard_id
         WHERE h.usuario_id = ?
         ORDER BY h.data_utilizacao DESC
     ''', (current_user.id,)).fetchall()
+    
     conn.close()
     
     return render_template('perfil.html', user=current_user, historico=historico)
