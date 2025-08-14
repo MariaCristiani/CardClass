@@ -30,8 +30,16 @@ h2{
   margin-top: 10px;
 }
 
+.historico-lista {
+    list-style: none;
+    padding-left: 0;
+}
+
 .historico-lista li {
-  margin-bottom: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
 }
 
 hr {
