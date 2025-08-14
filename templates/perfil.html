@@ -10,16 +10,14 @@
         <p><strong>Nome:</strong> {{ user.nome }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <a href="{{ url_for('meus_flashcards') }}" class="flashcard">Meus Flashcards</a>
-        
         <h2>Histórico</h2>
         {% if historico %}
             <ul class="historico-lista">
                 {% for item in historico %}
                     <li>
-                        <strong>Matéria:</strong> {{ item.materia }}<br>
+                        <strong>Matéria:</strong> {{ item.materia }}
                         <strong>Pergunta:</strong> {{ item.pergunta }}
                     </li>
-                    <hr>
                 {% endfor %}
             </ul>
         {% else %}
