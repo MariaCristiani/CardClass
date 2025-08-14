@@ -207,6 +207,7 @@ def atualizar_flashcard():
 
     flash('Flashcard atualizado com sucesso!', 'success')
     return redirect(url_for('meus_flashcards'))
+
 @app.route('/meus_flashcards')
 @login_required
 def meus_flashcards():
@@ -235,6 +236,7 @@ def meus_flashcards():
         flashcards_por_materia=flashcards_por_materia,
         ultimo_flashcard=ultimo_flashcard
     )
+
 @app.route('/marcar')
 @login_required
 def marcar_flashcard():
@@ -242,6 +244,20 @@ def marcar_flashcard():
     if not flashcard_id:
         flash('ID não informado', 'error')
         return redirect(url_for('meus_flashcards'))
+
+    conn = get_db_connection()
+    
+    flashcard = conn.execute('SELECT materia FROM flashcards WHERE id = ?', 
+                           (flashcard_id,)).fetchone()
+    
+    conn.execute('''
+        INSERT INTO flashcard_historico (usuario_id, flashcard_id, acerto)
+        VALUES (?, ?, NULL)
+    ''', (current_user.id, flashcard_id))
+    
+    conn.commit()
+    conn.close()
+
     response = make_response(redirect(url_for('meus_flashcards')))
     response.set_cookie('ultimo_flashcard', flashcard_id, max_age=60*60*24*30)
     return response
@@ -275,14 +291,14 @@ def logout():
 def perfil():
     conn = get_db_connection()
     historico = conn.execute('''
-        SELECT f.pergunta, h.data_utilizacao, h.acerto
+        SELECT f.materia, f.pergunta
         FROM flashcard_historico h
         JOIN flashcards f ON f.id = h.flashcard_id
         WHERE h.usuario_id = ?
         ORDER BY h.data_utilizacao DESC
     ''', (current_user.id,)).fetchall()
     conn.close()
-
+    
     return render_template('perfil.html', user=current_user, historico=historico)
 
 @app.route('/buscar', methods=['GET'])
