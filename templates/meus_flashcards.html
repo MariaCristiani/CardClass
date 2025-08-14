@@ -4,33 +4,53 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='flashcard.css') }}">
+
+<br>
 <h1>Meus Flashcards</h1>
 
-{% for materia, flashcards in flashcards_por_materia.items() %}
-<section class="materia">
-    <h2>{{ materia }}</h2>
-    <div class="flashcard-container">
-        {% for f in flashcards %}
-        <div class="flashcard">
-            <div class="flashcard-inner">
-                <div class="flashcard-front">{{ f['pergunta'] }}</div>
-                <div class="flashcard-back">{{ f['resposta'] }}</div>
-            </div>
-            <div class="flashcard-actions">
-                <form action="{{ url_for('excluir_flashcard') }}" method="POST">
-                    <input type="hidden" name="id" value="{{ f['id'] }}">
-                    <button type="submit" class="excluir">Excluir</button>
-                </form>
-                <form action="{{ url_for('editar_flashcard') }}" method="POST">
-                    <input type="hidden" name="id" value="{{ f['id'] }}">
-                    <button type="submit" class="editar">Editar</button>
-                </form>
-                <a href="{{ url_for('marcar_flashcard', flashcard_id=f['id']) }}" class="marcar">Marcar como último visto</a>
-            </div>
-        </div>
-        {% endfor %}
+{% if termo_busca %}
+    <div class="busca-info">
+        <p>Resultados para: <strong>"{{ termo_busca }}"</strong></p>
+        <a href="{{ url_for('meus_flashcards') }}" class="limpar-busca">Limpar busca</a>
     </div>
-</section>
-{% endfor %}
+    <br>
+    <br>
+{% endif %}
 
+{% if flashcards_por_materia %}
+    {% for materia, flashcards in flashcards_por_materia.items() %}
+    <section class="materia-section">
+        <h2>{{ materia }}</h2>
+        <div class="flashcard-container">
+            {% for f in flashcards %}
+            <div class="flashcard {% if ultimo_flashcard and f['id'] == ultimo_flashcard|int %}flashcard-marcado{% endif %}">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">{{ f['pergunta'] }}</div>
+                    <div class="flashcard-back">{{ f['resposta'] }}</div>
+                </div>
+                <div class="flashcard-actions">
+                    <form action="{{ url_for('excluir_flashcard') }}" method="POST">
+                        <input type="hidden" name="id" value="{{ f['id'] }}">
+                        <button type="submit" class="excluir">Excluir</button>
+                    </form>
+                    <form action="{{ url_for('editar_flashcard') }}" method="POST">
+                        <input type="hidden" name="id" value="{{ f['id'] }}">
+                        <button type="submit" class="editar">Editar</button>
+                    </form>
+                    <a href="{{ url_for('marcar_flashcard', flashcard_id=f['id']) }}" class="marcar">Marcar</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+{% else %}
+    <p class="sem-resultados">
+        {% if termo_busca %}
+            Nenhum flashcard encontrado para "{{ termo_busca }}"
+        {% else %}
+            Você não criou nenhum flashcard ainda.
+        {% endif %}
+    </p>
+{% endif %}
 {% endblock %}
