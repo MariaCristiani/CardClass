@@ -16,13 +16,14 @@
             <ul class="historico-lista">
                 {% for item in historico %}
                     <li>
-                        <strong>Título:</strong> {{ item.titulo }}<br>
+                        <strong>Matéria:</strong> {{ item.materia }}<br>
+                        <strong>Pergunta:</strong> {{ item.pergunta }}
                     </li>
                     <hr>
                 {% endfor %}
             </ul>
         {% else %}
-            <p>Você ainda não respondeu nenhum flashcard.</p>
+            <p>Nenhum flashcard visualizado ainda.</p>
         {% endif %}
     </div>
 {% endblock %}
