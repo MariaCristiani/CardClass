@@ -320,8 +320,22 @@ def buscar_flashcards():
     ''', (current_user.id, f'%{termo}%', f'%{termo}%', f'%{termo}%')).fetchall()
     
     conn.close()
+
+    flashcards_por_materia = {}
+    for f in flashcards:
+        materia = f['materia'] or 'Outros'
+        if materia not in flashcards_por_materia:
+            flashcards_por_materia[materia] = []
+        flashcards_por_materia[materia].append(f)
+
+    ultimo_flashcard = request.cookies.get('ultimo_flashcard')
     
-    return render_template('meus_flashcards.html', flashcards=flashcards, termo_busca=termo)
+    return render_template(
+        'meus_flashcards.html',
+        flashcards_por_materia=flashcards_por_materia,
+        ultimo_flashcard=ultimo_flashcard,
+        termo_busca=termo
+    )
 
 @app.errorhandler(404)
 def pagina_nao_encontrada(e):
