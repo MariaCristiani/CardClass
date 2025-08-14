@@ -13,3 +13,13 @@ CREATE TABLE flashcards (
     id_usuario INTEGER,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
+
+CREATE TABLE IF NOT EXISTS flashcard_historico (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    flashcard_id INTEGER NOT NULL,
+    data_utilizacao TEXT DEFAULT CURRENT_TIMESTAMP,
+    acerto BOOLEAN,
+    FOREIGN KEY (usuario_id) REFERENCES users(id),
+    FOREIGN KEY (flashcard_id) REFERENCES flashcards(id)
+);
