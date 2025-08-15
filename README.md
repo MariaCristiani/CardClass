@@ -15,6 +15,7 @@ O CardClass foi feito utilizando o framework ```Flask``` para fazer a aplicaçã
 1. Clone o repositório do projeto na sua máquina. Você pode fazer isso utilizando o comando:
 ```cmd
 git clone https://github.com/MariaCristiani/CardClass.git
+cd CardClass
 ```
 
 2. Crie e ative o ambiente virtual.
