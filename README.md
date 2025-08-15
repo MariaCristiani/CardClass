@@ -14,7 +14,7 @@ O sistema permite que o usuário crie, edite, exclua e pesquise flashcards, alé
 O CardClass foi feito utilizando o framework ```Flask``` para fazer a aplicação. Então você precisa seguir os seguintes passos, caso tenha interesse em rodar esse projeto localmente:
 1. Clone o repositório do projeto na sua máquina. Você pode fazer isso utilizando o comando:
 ```cmd
-git clone https://github.com/MariaCristiana/CardClass.git
+git clone https://github.com/MariaCristiani/CardClass.git
 ```
 
 2. Crie e ative o ambiente virtual.
